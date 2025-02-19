@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Field {
+  fieldId       String  @id
+  fieldName     String
+  fieldExtent   String
+  fieldLocation String
+  fieldImage1   String
+  fieldImage2   String
+  Crop          Crop[]
+  Staff         Staff[]
+}
+
+model Crop {
+  cropId             String @id
+  cropName           String
+  cropScientificName String
+  cropCategory       String
+  cropSeason         String
+  cropImage1         String
+  cropField          Field  @relation(fields: [cropFieldId], references: [fieldId])
+  cropFieldId        String
+}
+
+model Staff {
+  staffId      String @id
+  firstName    String
+  lastName     String
+  designation  String
+  gender       String
+  joinedDate   String
+  dob          String
+  addressLine1 String
+  addressLine2 String
+  addressLine3 String
+  addressLine4 String
+  addressLine5 String
+  contactNo    String
+  email        String
+  role         String
+  staffField   Field  @relation(fields: [staffFieldId], references: [fieldId])
+  staffFieldId String
+}
