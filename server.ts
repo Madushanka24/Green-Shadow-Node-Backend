@@ -3,7 +3,7 @@ import fieldRoutes from "./routes/field-routes";
 import cropRoutes from "./routes/crop-routes";
 import staffRoutes from "./routes/staff-routes";
 import authRoutes, {authenticateToken} from "./routes/auth-routes";
-
+import cors from 'cors';
 
 const app = express();
 
