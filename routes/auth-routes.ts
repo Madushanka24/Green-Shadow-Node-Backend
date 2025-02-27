@@ -17,7 +17,7 @@ router.post("/login", async (req, res) => {
     try {
         const isVerified = await verifyUser(user);
         if(isVerified){
-            const token = jwt.sign({username}, process.env.SECRET_KEY as Secret, {expiresIn: "1m"})
+            const token = jwt.sign({username}, process.env.SECRET_KEY as Secret, {expiresIn: "7d"})
             const refreshToken = jwt.sign({username}, process.env.REFRESH_TOKEN as Secret, {expiresIn: "7d"})
             res.json({
                 accessToken: token,
@@ -28,14 +28,17 @@ router.post("/login", async (req, res) => {
         }
     }catch (error){
         console.error(error);
-        res.status(400).send(error);
     }
 })
 
 router.post("/register", async (req, res) => {
     console.log('Register', req.body);
-    const username = req.body.username;
-    const password = req.body.password;
+
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        console.log("User not given");
+    }
 
     const user : User = {username, password};
 
@@ -44,7 +47,7 @@ router.post("/register", async (req, res) => {
         res.status(201).json(registration);
     }catch(error){
         console.log(error);
-        res.status(401).json(error);
+        res.status(500).json(error);
     }
 })
 

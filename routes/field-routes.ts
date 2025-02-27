@@ -1,6 +1,6 @@
 import {addField, deleteField, getAllFields, getField, updateField} from "../database/field-data-store";
 import Field from "../modle/Field";
-import Express from "express";
+import express from "express";
 import {upload} from "../libraries/MulterConfig";
 // @ts-ignore
 
