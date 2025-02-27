@@ -1,16 +1,23 @@
-import express from "express";
+import Express from "express";
 import {addCrop, deleteCrop, getAllCrops, getCrop, updateCrop} from "../database/crop-data-store";
 import Crop from "../modle/Crop";
+import {upload} from "../libraries/MulterConfig";
+import express from "express";
 const router = express.Router();
 
-router.post("/add", async(req, res) => {
+router.post("/add",  upload.fields([{ name: 'cropImage1', maxCount: 1 }]),async(req, res) => {
     const crop: Crop = req.body;
+    const files = req.files as { [cropName: string]: Express.Multer.File[] };
+    const img1 = files['cropImage1']?.[0]?.buffer.toString('base64'); // Convert to base64
+
+    // Add image data to the fields object
+    crop.cropImage1 = img1 || '';
     console.log("Received Data", crop);
     try{
         const addedCrop = await addCrop(crop);
         console.log(addedCrop);
         res.send('Crop Added')
-    }catch(err){
+    }catch(err: any){
         console.log("error adding crop", err);
         if (err.message === 'A crop with this ID already exists.') {
             res.status(400).send(err.message);
@@ -27,10 +34,10 @@ router.delete("/delete/:cropId", async (req, res) => {
         await deleteCrop(id);
         console.log("Crop with id " + id +" deleted");
         res.send('Crop Deleted');
-    }catch(err){
-        console.log("error deleting crop", err);
-        if(err.message === 'The crop with this ID doesnt exists'){
-            res.status(404).send(err.message);
+    }catch(error: any){
+        console.log("error deleting crop", error);
+        if(error.message === 'The crop with this ID doesnt exists'){
+            res.status(404).send(error.message);
         } else {
             res.status(500).send("An error occurred while deleting the crop.");
         }
@@ -38,14 +45,20 @@ router.delete("/delete/:cropId", async (req, res) => {
 })
 
 
-router.put("/update/:cropId",async (req, res) => {
+router.put("/update/:cropId", upload.fields([{ name: 'cropImage1', maxCount: 1 }]), async (req, res) => {
     console.log("Updating crop...")
     const id:string = req.params.cropId;
     const crop : Crop = req.body;
+    const files = req.files as { [cropName: string]: Express.Multer.File[] };
+    const img1 = files['cropImage1']?.[0]?.buffer.toString('base64'); // Convert to base64
+
+    // Add image data to the fields object
+    crop.cropImage1 = img1 || '';
+    console.log("Received Data", crop);
     try{
         await updateCrop(id, crop);
         res.send('Crop Updated');
-    }catch(err){
+    }catch(err: any){
         console.log("error updating crop", err);
         if(err.message === 'The crop with this ID doesnt exists'){
             res.status(404).send(err.message);
@@ -71,10 +84,11 @@ router.get("/get/:cropId", async (req, res) => {
 router.get("/get", async (req, res) => {
     console.log("Fetching all crops");
     try{
-       const crops=  await getAllCrops();
-       res.json(crops);
+        const crops=  await getAllCrops();
+        res.json(crops);
     }catch(err){
         console.log("error getting crops", err);
     }
 })
+
 export default router;

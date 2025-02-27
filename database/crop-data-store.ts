@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function addCrop(c: Crop){
     console.log("Adding Crop...")
     try{
-       const newCrop  = await prisma.crop.create({
+        const newCrop  = await prisma.crop.create({
             data:{
                 cropId: c.cropId,
                 cropName: c.cropName,
@@ -20,7 +20,7 @@ export async function addCrop(c: Crop){
         console.log('Crop Added store:',newCrop)
         console.log("Crop Added successfully");
     }catch(err) {
-        if (err instanceof Prisma) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2002') {
                 throw new Error('A crop with this ID already exists.');
             }

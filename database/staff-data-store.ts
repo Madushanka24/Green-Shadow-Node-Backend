@@ -1,4 +1,4 @@
-import {Prisma, PrismaClient } from "@prisma/client";
+import {Prisma, PrismaClient} from "@prisma/client";
 import Staff from "../modle/Staff";
 import exp = require("node:constants");
 
@@ -29,8 +29,8 @@ export async function addStaff(s: Staff){
         })
         console.log('Staff Added store:', newStaff);
         console.log("Staff Added successfully");
-    } catch (err:any) {
-        if (err instanceof Prism) {
+    } catch (err) {
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2002') {
                 throw new Error('A staff with this ID already exists.');
             }
@@ -76,7 +76,7 @@ export async function updateStaff(staffId: string, s: Staff){
                 contactNo: s.contactNo,
                 email: s.email,
                 role: s.role,
-                fieldCode: s.staffFieldId
+                staffFieldId: s.staffFieldId
             }
         })
         console.log("Staff updated successfully", staffId);
@@ -113,4 +113,5 @@ export async function getStaff(staffId: string){
         }
         throw err;
     }
+
 }

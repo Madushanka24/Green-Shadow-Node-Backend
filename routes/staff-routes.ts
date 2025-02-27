@@ -1,5 +1,5 @@
 import {addStaff, deleteStaff, getAllStaffs, getStaff, updateStaff} from "../database/staff-data-store";
-import Staff from "../model/Staff";
+import Staff from "../modle/Staff";
 import express from "express";
 const router = express.Router();
 
@@ -71,8 +71,8 @@ router.get("/get/:staffId", async (req, res) => {
 router.get("/get", async (req, res) => {
     console.log("Fetching all staffs");
     try{
-       const staffs=  await getAllStaffs();
-       res.json(staffs);
+        const staffs=  await getAllStaffs();
+        res.json(staffs);
     }catch(err){
         console.log("error getting staffs", err);
     }

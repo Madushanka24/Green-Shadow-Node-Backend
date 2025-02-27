@@ -1,10 +1,14 @@
 import { PrismaClient } from "@prisma/client";
-import {User} from "../model/User";
+import {User} from "../modle/User";
 import bcrypt from "bcrypt";
 
 const prisma = new  PrismaClient();
 
 export async function createUser(user: User){
+    console.log("User data received:", user);
+    if (!user.password) {
+        throw new Error("Password is required and cannot be empty");
+    }
     const hashedPassword = await bcrypt.hash(user.password, 10);
 
     const addUser = await prisma.user.create({

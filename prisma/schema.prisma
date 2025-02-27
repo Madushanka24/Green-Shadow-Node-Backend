@@ -18,8 +18,8 @@ model Field {
   fieldName     String
   fieldExtent   String
   fieldLocation String
-  fieldImage1   String
-  fieldImage2   String
+  fieldImage1   String  @db.LongText
+  fieldImage2   String  @db.LongText
   Crop          Crop[]
   Staff         Staff[]
 }
@@ -30,7 +30,7 @@ model Crop {
   cropScientificName String
   cropCategory       String
   cropSeason         String
-  cropImage1         String
+  cropImage1         String @db.LongText
   cropField          Field  @relation(fields: [cropFieldId], references: [fieldId])
   cropFieldId        String
 }
@@ -53,4 +53,9 @@ model Staff {
   role         String
   staffField   Field  @relation(fields: [staffFieldId], references: [fieldId])
   staffFieldId String
+}
+
+model User {
+  username String @id
+  password String
 }

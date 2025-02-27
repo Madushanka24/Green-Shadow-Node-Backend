@@ -1,7 +1,7 @@
 import jwt, {Secret} from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import express from "express";
-import {User} from "../model/User";
+import {User} from "../modle/User";
 import {createUser, verifyUser} from "../database/user-data-store";
 
 dotenv.config();
